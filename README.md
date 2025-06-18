@@ -1,0 +1,2 @@
+# DP Reports
+While the repository itself is public, it is made that way only for the ease of my educators to view my Internal Assessments and Extended Essay. Please follow academic guidelines and do not plagiarize my writings, but feel free to roam around and see how DP is treating me.
