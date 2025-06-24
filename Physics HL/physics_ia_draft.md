@@ -75,4 +75,6 @@ Controlled Variables:
 	1. Do steps 2.1 to 2.9 for 10, 15, 20, 25, 30, 35, 40 degrees.
 4. Dispose of materials safely.
 ## Sources
-- 
+1. [Brilliant](https://brilliant.org/wiki/small-angle-approximation/)
+2. [Nicolas](https://arxiv.org/pdf/1805.00002)
+3. [NumberAnalysis](https://www.numberanalytics.com/blog/ultimate-small-angle-approx-guide#google_vignette)
