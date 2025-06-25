@@ -30,6 +30,7 @@ To what extent does the small-angle approximation accurately predict the time pe
 Independent Variable: 
 - Angle of the initial release of a pendulum.
 	Explanation: 10, 15, 20, 25, 30, 35, 40, 45 degrees.
+	Reasoning: The small angle approximation relies on the assumption that $\sin(\theta)=\theta,  \theta<15 \textdegree$, and the purpose of this experiment is to explore why does it work and how it performs for when $\theta > 15\textdegree$? Difference of $5\textdegree$ was chosen to gather more data and better observations and the range has stopped at $45 \textdegree$ as at angles higher than $45 \textdegree$, the swinging motion of the pendulum would be broken due to lack of centripetal force of tension.
 	Apparatus: Protractor $\pm0.5\textdegree$.
 	(The reading error is the half of the smallest division that the analog instrument can measure.)
 Dependent Variable:
