@@ -72,7 +72,7 @@ After deciding on a leaf node $s'$ to **expand**, new leaf node of the most prob
 ## Methodology
 In carrying this investigation, we will replicate the methodology of the original AlphaZero paper by hosting 100 game match between two engines. (8) However, while the original paper has only reviewed the final score, here the games will be additionally analysed qualitatively.
 
-A custom python script was written for flexibility and automation. A single python file communicates between two engines using Portable Game Notation (PGN) protocol. It outputs logs after every game and scores all the data in the sqlite database for future analysis. The code is provided in Appendix (a) with further instructions for replication.
+A custom python script was written for flexibility and automation. A single python file communicates between two engines using Portable Game Notation (PGN) protocol. It outputs logs after every game and scores all the data in the sqlite database for future analysis. The code is provided in Appendix (a) with further instructions for replication in Appendix (b).
 
 The recent versions of Stockfish heavily relies on Efficiency Updatable Neural Network (NNUE), which adapts and implements deep neural networks, stripping it from its search-based purity. (25) For this reason, the older variant will be used, specifically Stockfish 11, as it was the last version that hasn't relied on NNUE. (26)
 
@@ -81,3 +81,40 @@ AlphaZero is not open-source, which makes it unattainable for non-DeepMind emplo
 Hardware running this match was a singular Apple-Silicon based computer with M1-Max containing 10 CPU, 32 GPU, and 16 Neural Engine Cores with 32 Gb of RAM and 1Tb of storage. This hardware doesn't bottleneck either of chess engines, providing enough CPU cores for Stockfish and memory with GPU cores for LeelaChessZero which it is strongly reliant on.
 
 Unlike some popular chess tournaments, where first several moves are given from the games played by humans, in this paper, engines will be given control over from the beginning. This should eliminate unfair advantage one could get over another if the position is unfair.
+## Match Results
+> **Table**: Table summarising the wins/losses for white/black, avg move count...
+
+> **Illustration**: Pie chart of the outcome (wins/losses/ties+reasons)
+	Total Games: 100
+	Stockfish wins: 14
+	Lc0 wins: 49
+	Draws: 37
+		Reasons:
+		Threefold_repetition: 32
+		Insufficient_material: 5
+
+PGN notation for the first 5 games is available in the Appendix (3). 
+## Analysis
+1. Results
+LeelaChessZero has demonstrated superior performance over Stockfish with 49 wins, 37 ties and 14 losses with an average of 70 moves per game. This is slightly different from the original match, where AlphaZero hasn't lost a single match with 28 wins and 72 draws. (28)
+
+There is a common saying that "if both sides play perfectly in a game of chess, it will end with a tie." Until chess will be mathematically solved, this can't be neither confirmed nor denied; however, this would explain so many ties in the original match. The 28 wins from AlphaZero could be risen from its slightly superior performance and if Stockfish would be slightly better, it would be a complete match with 100 draws.
+
+2. Threefold repetition
+The surprising result was the source of the draws: 32 from threefold repetition and only 5 from insufficient material. (Threefold repetition occurs when both players repeat moves three times. Insufficient material occurs at the end game, where no player has enough pieces to checkmate.) This contrasts strongly from human play, where nearly all of the ties are from insufficient material or stalemate, with threefold repetition occurring relatively rarely. 
+
+For example, in the Game 7, while Stockfish has extra material, LeelaChessZero was able to perform a successful attack on the king, with checkmate in 1 move. However, Stockfish has discovered that continuously checking the opponent results in a draw, thus doing so and avoiding a loss. Alternatively, Game 8 features the endgame where both opponents refuse to let the king of the other opponent to approach, thus repeating moves with rooks to keep kings separated (If black moves otherwise, white will checkmate. If white moves otherwise, black will promote a queen). Game 4 too, ends with threefold repetition, where both parties lose too much by moving otherwise. However, in several games such as Game X, both engines just decide on a draw by threefold repetition in the middle of what looks like a promising game. This pattern persists across tournaments.
+
+After further analysis of these games, it was discovered that it is common for both Stockfish and LeelaChessZero to converge at the position, where both engines believe that the most optimal move turns out to be the move repeating the previous one, leading to draw
+
+3. LeelaChessZero's evaluation function
+There was a common pattern of LeelaChessZero clearly giving away pieces. This wasn't a part of a strategy such as sacrifice (when a piece is given away for some other form of advantage), but rather just a present. Despite this however, even in further analysis giving LeelaChessZero more time and resources for a move, she was certain in those specific moves. 
+
+This behaviour is persistent in AlphaZero's games of the DeepMind's match. An analysis published by an independent Chess YouTuber notices a similar pattern: AlphaZero just gives out extra material without any reason. (29) 
+
+A possible explanation for such careless behaviour with pawns could be that we as humans are too attached to pieces in chess and we value having more pieces, literally calling it a material advantage. Stockfish's evaluation functions are handcrafted by humans, which prevents it from choosing the moves that lose pieces without justification. However, LeelaChessZero hasn't received any of this information during training through self-play, defining its own evaluation function. There is a possibility that material advantage doesn't matter as much as other parameters of the game do, resulting in such a policy.
+
+4. LeelaChessZero's random moves
+Within the games, LeelaChessZero often choose the moves that Stockfish and we perceive as waste of turn as they seem random. They seem to occur most commonly during the openings such as in Move X Game Y or right before the major attack such as Move A Game B. Again, the same pattern was observed in AlphaZero's moves, which suggests that this is an emergent behaviour of this paradigm of engines as Stockfish never moves in this way by seeing them as purposeless. (29)
+
+Possible explanation for such moves could be that Leela differs from Stockfish and Humans in a way that she sees the game. While Stockfish tries to search into the future by trying out as many moves as possible and finding one which seems most efficient, LeelaChessZero checks the possible legal moves and predicts the possibility of it leading to the victory. You could imagine it as Stockfish looking into short term benefits with near future positions while LeelaChessZero seeing the whole game as one as the probability of winning and loosing.

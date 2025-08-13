@@ -61,7 +61,6 @@ $$UCB(s,a)= \underbrace{E[\text{win}[k,p]]}_{\text{exploit}} + \underbrace{C\sqr
 
 Unlike Stockfish, which can run right after its creation, AlphaZero requires training for its network to understand what the actual values of positions are. The training loop consists of AlphaZero using first starting with MCST and network randomly initialised parameters. It plays games with itself, storing all the data in a buffer. Network parameters are then updated using gradient descent by using the data from the buffer, by minimising the difference between the predictions made by the network and the true value stored in the buffer. This iterative cycle gradually refines the network's skill all without any external influence.
 (Training sections kept short on purpose to give the reader brief understanding while staying loyal to the original aim and research question. For more information please check: (20), (22) and (24))
-
 ## Methodology
 This investigation replicates the core approach of the original AlphaZero paper by running a 100 game match between two engines. (8) However, unlike the original paper, which only reviewed the final scores, this work will also conduct a qualitative analysis.
 
@@ -71,6 +70,44 @@ Recent versions of Stockfish incorporate Efficiency Updatable Neural Network (NN
 
 Due to the proprietary nature of AlphaZero, which makes it unavailable outside DeepMind, LeelaChessZero was selected as an open-source alternative based on the same architecture. It is based on reinforcement learning with self-play, is actively maintained, offers performance optimisations, and has won the TCEC that put it above other AlphaZero-inspired engines.
 
-Hardware used to run this match is a single ARM-based system with 10 CPU, 32 GPU, and 16 NPU cores supported by 32 GB of RAM and 1 TB SSD. This ensures no computational bottlenecks for either engine, providing enough resources for Stockfish's search and sufficient GPU and NPU for LeelaChessZero's neural network evaluations.
+Hardware used to run this match is a single ARM-based system with 10 CPU, 32 GPU, and 16 NPU cores supported by 32 GB of RAM and 1 TB SSD. This ensures no computational bottlenecks for either engine, providing enough resources for Stockfish's search and sufficient GPU and NPU for LeelaChessZero's neural network evaluations. The limiting factor for both chess engines was chosen to be time: specifically chosen to be 2.5 seconds per move after which, the player gave the best move it found in this time interval.
 
 Lastly, in contrast to certain engine competitions, where engines begin from predetermined opening positions played by humans, *books*, all games here start from the standard chess starting positions. (27) This is done to avoid bias that could arise from giving one chess engine better position over the other.
+## Match Results
+## Analysis
+1. Results
+PGN notation for the first five games is available in the Appendix (3). In the 100 game match, LeelaChessZero demonstrated superior performance over Stockfish with 49 wins, 37 ties and 14 losses, averaging 70 moves per game. This contrasts from the original DeepMind match, where AlphaZero remained undefeated with 28 wins and 72 draws. (28)
+
+The smaller proportion of draws in this experiment could be due to difference in hardware, engine versions, and training data, rather than fundamental algorithmic changes. One highly theoretical explanation for the high number of draws in both cases is the notion that "perfect" chess play would result in a tie: a hypothesis that remains unconfirmed until chess will be fully solved. If both engines approached optimal play, wins/losses would only occur when one side deviates from perfection. The higher loss rate for LeelaChessZero compared to AlphaZero in our match suggests that such deviations were more frequent.
+
+---
+**Observation:**  
+Of the 37 draws, 32 (86%) were caused by threefold repetition, while only 5 were from insufficient material.
+
+**Example:**  
+In Game 7, despite having extra material, Stockfish forced perpetual check to avoid a loss when facing a mating threat. In Game 8, both engines used rook checks to prevent the opposing king from approaching, creating a locked position. Several games (e.g., Game 4) reached repetition in the middle game with no imminent tactical reason.
+
+**Possible Explanation:**  
+This frequency contrasts strongly with human grandmaster play, where most draws occur through insufficient material or stalemate. The behaviour suggests that both engines often converge on positions they evaluate as exactly balanced, where the “optimal” move from both perspectives repeats the previous position.
+
+---
+2. Threefold repetition
+Source of the draws were unusual compared to human games: 32 from threefold repetition and only 5 from insufficient material. (Threefold repetition occurs when both players repeat moves three times. Insufficient material occurs at the end game, where no player has enough pieces to checkmate.)
+
+In Game 7, despite having extra material, Stockfish forced perpetual check to avoid a loss when facing a threat to mate resulting in threefold repetition. Alternatively, Game 8 featured both engines using rooks to prevent opposing kings from approaching, creating a locked position. Several games such as Game 4 ends with threefold repetition, where both sides decide on a draw by threefold repetition in the middle of what looks like a promising game.
+
+The unusual frequency of threefold repetition in chess engines contrasts to one of human grandmaster play, where most draws occur through insufficient material or stalemate. This behaviour suggests that both engines often converge at positions they evaluate as balanced, where the "optimal" move for both repeats the previous position, leading to draw.
+
+3. LeelaChessZero's evaluation function
+There was a common pattern of LeelaChessZero clearly giving away pieces in cases such as Move X Game Y or Move A Game B. This often isn't a part of a strategy such as sacrifice (when a piece is given away for some other form of advantage), but rather just a present. 
+
+This behaviour is persistent in AlphaZero's games of the DeepMind's match. An analysis published by an independent Chess YouTuber notices a similar pattern: AlphaZero just gives out extra material without any reason. (29) 
+
+Despite this, in further analysis giving LeelaChessZero more time and resources to check the correctness of the move, the engine was certain in those specific moves, indicating that this wasn't just a mistake but what LeelaChessZero believed as: the optimal move. A possible explanation for such careless behaviour with material could be that we as humans are too attached to pieces in chess and we value having more pieces. Stockfish's evaluation functions are handcrafted by humans, which prevents it from choosing the moves that lose pieces without justification. However, LeelaChessZero hasn't received any of this information during training through self-play, defining its own evaluation function. There is a possibility that material advantage doesn't matter as much as other parameters of the game do, resulting in such a policy.
+
+4. LeelaChessZero's random moves
+Within the games, LeelaChessZero often choose the moves that Stockfish and we perceive as waste of turn as they seem random. 
+
+They seem to occur most commonly during the openings such as in Move X Game Y or right before the major attack such as Move A Game B. The same pattern was observed in AlphaZero's moves, which suggests that this is an emergent behaviour of this paradigm of engines as Stockfish never moves in this way by seeing them as purposeless. (29)
+
+Possible explanation for such moves could be that Leela differs from Stockfish and Humans in a way that she sees the game. While Stockfish tries to search into the future by trying out as many moves as possible and finding one which seems most efficient, LeelaChessZero checks the possible legal moves and predicts the possibility of it leading to the victory. You could imagine it as Stockfish looking into short term benefits with near future positions while LeelaChessZero seeing the whole game as one as the probability of winning and loosing.

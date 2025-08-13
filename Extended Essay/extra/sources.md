@@ -194,7 +194,16 @@ Source: https://wiki.chessdom.org/Rules
 
 ---
 28
+Google's AlphaZero Destroys Stockfish In 100-Game Match
+Source:  https://www.chess.com/news/view/google-s-alphazero-destroys-stockfish-in-100-game-match
 
+---
+29
+How AlphaZero Completely CRUSHED Stockfish
+https://youtu.be/8dT6CR9_6l4?si=tjoCQ7i4YTzvRNpJ
+
+---
+30
 
 
 Other Sources:
