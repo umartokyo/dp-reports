@@ -67,3 +67,17 @@ $$UCB(s,a)= \underbrace{E[\text{win}[k,p]]}_{\text{exploit}} + \underbrace{C\sqr
 UCB measures the likelihood the move will be chosen through sum of two terms. Exploitation term of the Equation (2) defines the chance of winning by measuring the times won in the node over the total times played. Exploration term defines how much has algorithm already searched by measuring the nodes the parent has played through over the nodes played through within this node. $C$ is used as a weight, which balances between the two terms.
 
 After deciding on a leaf node $s'$ to **expand**, new leaf node of the most probable move decided by the UCB is added to it. In classical MCTS, **simulation** is done by calculating win rate by averaging outcome of random play; however, AlphaZero directly uses the network's (Equation (1)) value $v$ for leaf evaluation. Lastly, $v$ is **backpropagated** up to the tree, updating visit counts and values. 
+
+---
+## Methodology
+In carrying this investigation, we will replicate the methodology of the original AlphaZero paper by hosting 100 game match between two engines. (8) However, while the original paper has only reviewed the final score, here the games will be additionally analysed qualitatively.
+
+A custom python script was written for flexibility and automation. A single python file communicates between two engines using Portable Game Notation (PGN) protocol. It outputs logs after every game and scores all the data in the sqlite database for future analysis. The code is provided in Appendix (a) with further instructions for replication.
+
+The recent versions of Stockfish heavily relies on Efficiency Updatable Neural Network (NNUE), which adapts and implements deep neural networks, stripping it from its search-based purity. (25) For this reason, the older variant will be used, specifically Stockfish 11, as it was the last version that hasn't relied on NNUE. (26)
+
+AlphaZero is not open-source, which makes it unattainable for non-DeepMind employees. However, LeelaChessZero is an open-source alternative, based on the same architecture as AlphaZero, implementing self-play with reinforcement learning. LeelaChessZero specifically was chosen over other alternatives of AlphaZero due to it being constantly maintained and with optimisations, it's performance being better by a large margin.
+
+Hardware running this match was a singular Apple-Silicon based computer with M1-Max containing 10 CPU, 32 GPU, and 16 Neural Engine Cores with 32 Gb of RAM and 1Tb of storage. This hardware doesn't bottleneck either of chess engines, providing enough CPU cores for Stockfish and memory with GPU cores for LeelaChessZero which it is strongly reliant on.
+
+Unlike some popular chess tournaments, where first several moves are given from the games played by humans, in this paper, engines will be given control over from the beginning. This should eliminate unfair advantage one could get over another if the position is unfair.

@@ -61,3 +61,16 @@ $$UCB(s,a)= \underbrace{E[\text{win}[k,p]]}_{\text{exploit}} + \underbrace{C\sqr
 
 Unlike Stockfish, which can run right after its creation, AlphaZero requires training for its network to understand what the actual values of positions are. The training loop consists of AlphaZero using first starting with MCST and network randomly initialised parameters. It plays games with itself, storing all the data in a buffer. Network parameters are then updated using gradient descent by using the data from the buffer, by minimising the difference between the predictions made by the network and the true value stored in the buffer. This iterative cycle gradually refines the network's skill all without any external influence.
 (Training sections kept short on purpose to give the reader brief understanding while staying loyal to the original aim and research question. For more information please check: (20), (22) and (24))
+
+## Methodology
+This investigation replicates the core approach of the original AlphaZero paper by running a 100 game match between two engines. (8) However, unlike the original paper, which only reviewed the final scores, this work will also conduct a qualitative analysis.
+
+A custom python script was developed to automate match execution. The script communicates between two engines using Portable Game Notation (PGN) protocol, outputs logs after each game, and stores match data in the sqlite database for analysis. Full code and instructions for replications are provided in Appendix (a).
+
+Recent versions of Stockfish incorporate Efficiency Updatable Neural Network (NNUE) evaluation, adding neural network methods into historically a purely search-driven architecture. (25) To preserve a clear contrast of underlying architectures of both models, Stockfish 11 was used, as it is the last major release without NNUE integration. (26)
+
+Due to the proprietary nature of AlphaZero, which makes it unavailable outside DeepMind, LeelaChessZero was selected as an open-source alternative based on the same architecture. It is based on reinforcement learning with self-play, is actively maintained, offers performance optimisations, and has won the TCEC that put it above other AlphaZero-inspired engines.
+
+Hardware used to run this match is a single ARM-based system with 10 CPU, 32 GPU, and 16 NPU cores supported by 32 GB of RAM and 1 TB SSD. This ensures no computational bottlenecks for either engine, providing enough resources for Stockfish's search and sufficient GPU and NPU for LeelaChessZero's neural network evaluations.
+
+Lastly, in contrast to certain engine competitions, where engines begin from predetermined opening positions played by humans, *books*, all games here start from the standard chess starting positions. (27) This is done to avoid bias that could arise from giving one chess engine better position over the other.

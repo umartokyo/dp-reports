@@ -1,0 +1,2 @@
+Link to the online [Google Doc](https://docs.google.com/document/d/1llrWaaiOOfqGFue5ukJT9vqa6kcyAKB0oknqZGBoYNE/edit?tab=t.7i7wmmnus78s).
+The structure of the extended essay is inspired from these documents: [YoloDoc](https://www.clastify.com/ee/computer-science/6780d15d7adbeeaf5acd24b8).
