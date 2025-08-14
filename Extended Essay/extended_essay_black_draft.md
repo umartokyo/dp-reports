@@ -81,6 +81,12 @@ AlphaZero is not open-source, which makes it unattainable for non-DeepMind emplo
 Hardware running this match was a singular Apple-Silicon based computer with M1-Max containing 10 CPU, 32 GPU, and 16 Neural Engine Cores with 32 Gb of RAM and 1Tb of storage. This hardware doesn't bottleneck either of chess engines, providing enough CPU cores for Stockfish and memory with GPU cores for LeelaChessZero which it is strongly reliant on.
 
 Unlike some popular chess tournaments, where first several moves are given from the games played by humans, in this paper, engines will be given control over from the beginning. This should eliminate unfair advantage one could get over another if the position is unfair.
+## Hypothesis
+Based on the differences in the architectures of both engines, each one of them will certainly have own strategy for playing chess. However, nearly all modern engines play on superhuman level with elo (quantitative way to express players' performance) higher than of any human's since DeepBlue in 1997. (14)
+
+Since stockfish is based on heuristic evaluation functions designed by human masters, it would be logical to hypothesise that moves chosen by this engine would be comprehensible and even understandable with a clear logical reasoning behind each move by humans if given enough time. If so, Stockfish's play would be comparable to the chess master being given nearly infinite time to evaluate all moves every turn. However, as LeelaChessZero's evaluation function is self-learned without human intervention, the desired goals of this engine would be different of humans. This could result in a play that is beyond understanding of humans with the reason being that the objectives of the engine are different. 
+
+Additionally, with Stockfish's evaluation speed of millions of Nodes Per Second (NPS), it will always find the optimal move sequences if they are close in the future. (30) This contrasts with LeelaChessZero's thousands of NPS, which is compensated with higher quality of each node. While this factors correlate to the match result, this can't help determining the performance of each engine. It is more likely, however, that LeelaChessZero will follow the AlphaZero's footsteps, winning the majority of games.
 ## Match Results
 > **Table**: Table summarising the wins/losses for white/black, avg move count...
 
@@ -118,3 +124,5 @@ A possible explanation for such careless behaviour with pawns could be that we a
 Within the games, LeelaChessZero often choose the moves that Stockfish and we perceive as waste of turn as they seem random. They seem to occur most commonly during the openings such as in Move X Game Y or right before the major attack such as Move A Game B. Again, the same pattern was observed in AlphaZero's moves, which suggests that this is an emergent behaviour of this paradigm of engines as Stockfish never moves in this way by seeing them as purposeless. (29)
 
 Possible explanation for such moves could be that Leela differs from Stockfish and Humans in a way that she sees the game. While Stockfish tries to search into the future by trying out as many moves as possible and finding one which seems most efficient, LeelaChessZero checks the possible legal moves and predicts the possibility of it leading to the victory. You could imagine it as Stockfish looking into short term benefits with near future positions while LeelaChessZero seeing the whole game as one as the probability of winning and loosing.
+## Limitations
+## Conclusion

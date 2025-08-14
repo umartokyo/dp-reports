@@ -61,6 +61,14 @@ $$UCB(s,a)= \underbrace{E[\text{win}[k,p]]}_{\text{exploit}} + \underbrace{C\sqr
 
 Unlike Stockfish, which can run right after its creation, AlphaZero requires training for its network to understand what the actual values of positions are. The training loop consists of AlphaZero using first starting with MCST and network randomly initialised parameters. It plays games with itself, storing all the data in a buffer. Network parameters are then updated using gradient descent by using the data from the buffer, by minimising the difference between the predictions made by the network and the true value stored in the buffer. This iterative cycle gradually refines the network's skill all without any external influence.
 (Training sections kept short on purpose to give the reader brief understanding while staying loyal to the original aim and research question. For more information please check: (20), (22) and (24))
+## Hypothesis
+With the differences in the fundamental architectures between LeelaChessZero and Stockfish, it is expected that their playing styles will diverge noticeably. 
+
+Stockfish's handcrafted heuristic evaluations designed by human experts, supported by high search speed (millions of nodes per second), is likely to produce moves that align with established human principles in chess. This ability to calculate deeply into the game suggests that it will have an advantage in sharp forcing positions where concrete calculation is necessary.
+
+LeelaChessZero's self-trained neural network evaluation function may deviate from established human strategic principles  in chess with higher priority on long-term compensations over immediate gain. Although its raw search speed is far lower (thousands of nodes per second), each node evaluation is richer than Stockfish's. This would potentially allow it to excel in planning ahead long-term by excelling at complex positions.
+
+In this paper, it is anticipated that the primary outcome will be the draw with LeelaChessZero winning the majority of the rest, primarily through superior handling of positional and imbalanced positions, while Stockfish will dominate in direct tactical encounters.
 ## Methodology
 This investigation replicates the core approach of the original AlphaZero paper by running a 100 game match between two engines. (8) However, unlike the original paper, which only reviewed the final scores, this work will also conduct a qualitative analysis.
 
@@ -80,17 +88,6 @@ PGN notation for the first five games is available in the Appendix (3). In the 1
 
 The smaller proportion of draws in this experiment could be due to difference in hardware, engine versions, and training data, rather than fundamental algorithmic changes. One highly theoretical explanation for the high number of draws in both cases is the notion that "perfect" chess play would result in a tie: a hypothesis that remains unconfirmed until chess will be fully solved. If both engines approached optimal play, wins/losses would only occur when one side deviates from perfection. The higher loss rate for LeelaChessZero compared to AlphaZero in our match suggests that such deviations were more frequent.
 
----
-**Observation:**  
-Of the 37 draws, 32 (86%) were caused by threefold repetition, while only 5 were from insufficient material.
-
-**Example:**  
-In Game 7, despite having extra material, Stockfish forced perpetual check to avoid a loss when facing a mating threat. In Game 8, both engines used rook checks to prevent the opposing king from approaching, creating a locked position. Several games (e.g., Game 4) reached repetition in the middle game with no imminent tactical reason.
-
-**Possible Explanation:**  
-This frequency contrasts strongly with human grandmaster play, where most draws occur through insufficient material or stalemate. The behaviour suggests that both engines often converge on positions they evaluate as exactly balanced, where the “optimal” move from both perspectives repeats the previous position.
-
----
 2. Threefold repetition
 Source of the draws were unusual compared to human games: 32 from threefold repetition and only 5 from insufficient material. (Threefold repetition occurs when both players repeat moves three times. Insufficient material occurs at the end game, where no player has enough pieces to checkmate.)
 
@@ -111,3 +108,6 @@ Within the games, LeelaChessZero often choose the moves that Stockfish and we pe
 They seem to occur most commonly during the openings such as in Move X Game Y or right before the major attack such as Move A Game B. The same pattern was observed in AlphaZero's moves, which suggests that this is an emergent behaviour of this paradigm of engines as Stockfish never moves in this way by seeing them as purposeless. (29)
 
 Possible explanation for such moves could be that Leela differs from Stockfish and Humans in a way that she sees the game. While Stockfish tries to search into the future by trying out as many moves as possible and finding one which seems most efficient, LeelaChessZero checks the possible legal moves and predicts the possibility of it leading to the victory. You could imagine it as Stockfish looking into short term benefits with near future positions while LeelaChessZero seeing the whole game as one as the probability of winning and loosing.
+
+## Limitations
+## Conclusion

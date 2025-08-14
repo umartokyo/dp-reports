@@ -204,7 +204,10 @@ https://youtu.be/8dT6CR9_6l4?si=tjoCQ7i4YTzvRNpJ
 
 ---
 30
+NPS - What are the "Nodes per Second" in Chess Engine Analysis
+https://chessify.me/blog/nps-what-are-the-nodes-per-second-in-chess-engine-analysis
 
+---
 
 Other Sources:
 - [Leela Chess Zero](https://www.chessprogramming.org/Leela_Chess_Zero)
