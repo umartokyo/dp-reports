@@ -1,5 +1,5 @@
 ## Research Question
-To what extent does a deep reinforcement learning agent trained solely through self-play, similar to AlphaZero compare to traditional heuristic-based search algorithm such as Stockfish in their performance, win rate against each other?
+To what extent does a a chess engine trained with self-play and deep reinforcement learning compare to traditional heuristic-based search engine in performance and win rate?
 ## Introduction
 Not long ago, Large Language Models (LLM's) such as ChatGPT emerged, demonstrating the capabilities of Artificial Intelligence (AI) across a wide range of language-based tasks (11). However, as major AI labs have been increasing the training data and size of these models, the performance gains appear to be plateauing (10). One of the core reasons is thought to be the reliance of these models on human-generated data: they learn to generalise from patterns of our behaviour, thus they are limited to human performance (12). Interestingly, this pattern of stagnation is not new; a similar bottleneck was once met in another domain: computer chess. (13)
 
@@ -78,7 +78,7 @@ Recent versions of Stockfish incorporate Efficiency Updatable Neural Network (NN
 
 Due to the proprietary nature of AlphaZero, which makes it unavailable outside DeepMind, LeelaChessZero was selected as an open-source alternative based on the same architecture. It is based on reinforcement learning with self-play, is actively maintained, offers performance optimisations, and has won the TCEC that put it above other AlphaZero-inspired engines.
 
-Hardware used to run this match is a single ARM-based system with 10 CPU, 32 GPU, and 16 NPU cores supported by 32 GB of RAM and 1 TB SSD. This ensures no computational bottlenecks for either engine, providing enough resources for Stockfish's search and sufficient GPU and NPU for LeelaChessZero's neural network evaluations. The limiting factor for both chess engines was chosen to be time: specifically chosen to be 2.5 seconds per move after which, the player gave the best move it found in this time interval.
+Hardware used to run this match is a single ARM-based system with 10 CPU, 32 GPU, and 16 NPU cores supported by 32 GB of RAM and 1 TB SSD. This ensures no computational bottlenecks for either engine, providing enough resources for Stockfish's search and sufficient GPU and NPU for LeelaChessZero's neural network evaluations. The limiting factor for both chess engines was chosen to be time: specifically chosen to be 2.5 seconds per move after which, the engine played the best move it found in this time limit.
 
 Lastly, in contrast to certain engine competitions, where engines begin from predetermined opening positions played by humans, *books*, all games here start from the standard chess starting positions. (27) This is done to avoid bias that could arise from giving one chess engine better position over the other.
 ## Match Results
