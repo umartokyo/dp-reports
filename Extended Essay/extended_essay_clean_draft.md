@@ -1,9 +1,9 @@
 ## Research Question
 To what extent does a a chess engine trained with self-play and deep reinforcement learning compare to traditional heuristic-based search engine in performance and win rate?
 ## Introduction
-Not long ago, Large Language Models (LLM's) such as ChatGPT emerged, demonstrating the capabilities of Artificial Intelligence (AI) across a wide range of language-based tasks (11). However, as major AI labs have been increasing the training data and size of these models, the performance gains appear to be plateauing (10). One of the core reasons is thought to be the reliance of these models on human-generated data: they learn to generalise from patterns of our behaviour, thus they are limited to human performance (12). Interestingly, this pattern of stagnation is not new; a similar bottleneck was once met in another domain: computer chess. (13)
+Not long ago, Large Language Models (LLM's) such as ChatGPT emerged, demonstrating the capabilities of Artificial Intelligence (AI) across a wide range of language-based tasks (11). However, as major AI labs have been increasing the training data and size of these models, the performance gains appear to be plateauing (10). One of the core reasons is thought to be the reliance of these models on human-generated data: they learn to generalise from patterns of our behaviour, thus they are limited to human performance (12). Interestingly, this pattern of stagnation is not new; a similar bottleneck was previously encountered in another domain: computer chess. (13)
 
-Traditional chess engines based on the rule-based search algorithms such as heuristic evaluation functions with alpha-beta pruning proved successful in defeating the world champion of the time Garry Kasparov and kept improving ever since (14). Although the strength of these engines exceeded human performance by a large margin, progress was limited by the expertise of human experts who've expressed their strategies through careful manual tuning of parameters (4). Additionally, attempts to introduce a deep learning approach failed as engines built with this paradigm, while successful, struggled to match higher-end classical chess engines, with speculations that this is due to the fact they were trained on human gameplay data. (15)
+Traditional chess engines based on rule-based search algorithms such as heuristic evaluation functions with alpha-beta pruning proved successful in defeating the world champion of the time Garry Kasparov and kept improving ever since (14). Although the strength of these engines exceeded human performance by a large margin, progress was limited by the expertise of human experts who've expressed their strategies through careful manual tuning of parameters (4). Additionally, attempts to introduce a deep learning approach failed as engines built with this paradigm, while successful, struggled to match higher-end classical chess engines, with speculations that this is due to the fact they were trained on human gameplay data. (15)
 
 In 2016, DeepMind introduced AlphaGo - an AI agent which learned to play the game of Go not by mimicking human play, but training entirely through self-play. (16) Go is considered to be a complex game with significantly more possible moves on every turn than atoms in the universe! A major breakthrough of this approach was that AlphaGo has beaten the world champion Lee Sedol in the game which was long believed to require intuition and impossible to brute-force. (16)
 
@@ -18,11 +18,7 @@ Chess is a classical two player, deterministic (no element of chance involved; e
 ### Stockfish
 Based on classical search algorithms, Stockfish represents the pinnacle of human ingenuity. It has consistently dominated at competition, notably the Top Chess Engine Championship (TCEC), where it achieved 16 titles and 9 runner up finishes out of 26 tournaments. Its core architecture relies on a deterministic search with domain-specific optimisation, allowing it to evaluate billions of positions per second with remarkable accuracy.
 
-Static evaluation function is a numeric way of determining which side is in advantage in a given position without further search. It takes the board as input and returns a numerical score: positive values indicate advantage for white, negative for black, and zero represents equality. Parameters for evaluation are based on handcrafted features, tuned by chess experts and automated testing. These include but are not limited to:
-- Material Balance: material advantage.
-- Piece activity and mobility: number of available moves
-- Position: control of the centre and to the opponents king, safety of the king.
-Parameters are continuously refined and examples above might not represent the state of stockfish.
+Static evaluation function is a numeric way of determining which side is in advantage in a given position without further search. It takes the board as input and returns a numerical score: positive values indicate advantage for white, negative for black, and zero represents equality. Parameters for evaluation are based on handcrafted features, tuned by chess experts and automated testing. These include but are not limited to material balance, activity of pieces, number of available moves in every piece, safety of the king. Parameters are continuously refined and examples above might not represent the state of stockfish.
 
 > Three example positions with evaluation scores showing (1) material advantage, (2) positional advantage, and (3) equality despite uneven material.
 
@@ -53,7 +49,7 @@ $$(\mathbf{p},v)=f_\theta(s) \tag{1}$$
 Monte Carlo Tree Search is a heuristic search strategy which AlphaZero uses for selecting moves. MCT's operate in four main stages, repeated for hundreds of thousands of times before each move: Selection, Expansion, Simulation, and Backpropagation. (23)
 
 - Selection: From the root node (current position), the algorithm traverses the search tree using the Upper Confidence Bound (UCB) formula. It balances between exploration (searching for potentially better moves) and exploitation (following already-found high-value moves). (22)
-$$UCB(s,a)= \underbrace{E[\text{win}[k,p]]}_{\text{exploit}} + \underbrace{C\sqrt{\frac{2\ln(n_{parent(k)})}{n_k}}}_{\text{explore}} \tag{2}$$
+$$UCB(s,a)= \underbrace{Q(s,a)}_{\text{exploit}} + \underbrace{C\sqrt{\frac{2\ln(n_{parent(k)})}{n_k}}}_{\text{explore}} \tag{2}$$
 
 - Expansion: Exploitation term of the Equation (2) defines the chance of winning by measuring the times won in the node over the total times played, while exploration term defines how much has algorithm already searched by measuring the simulation the parent node has played through over the nodes played through within this node. $C$ is a parameter controlling exploration-exploitation tradeoff. (23)
 - Simulation:  After deciding on a leaf node $s'$ to **expand**, new leaf node of the most probable move decided by the UCB is added to it. In classical MCTS, **simulation** is done by calculating win rate by averaging outcome of random play; however, AlphaZero directly uses the network's (Equation (1)) value $v$ for leaf evaluation. (23)
@@ -66,7 +62,7 @@ With the differences in the fundamental architectures between LeelaChessZero and
 
 Stockfish's handcrafted heuristic evaluations designed by human experts, supported by high search speed (millions of nodes per second), is likely to produce moves that align with established human principles in chess. This ability to calculate deeply into the game suggests that it will have an advantage in sharp forcing positions where concrete calculation is necessary.
 
-LeelaChessZero's self-trained neural network evaluation function may deviate from established human strategic principles  in chess with higher priority on long-term compensations over immediate gain. Although its raw search speed is far lower (thousands of nodes per second), each node evaluation is richer than Stockfish's. This would potentially allow it to excel in planning ahead long-term by excelling at complex positions.
+LeelaChessZero's self-trained neural network evaluation function may deviate from established human strategic principles  in chess with higher priority on long-term compensations over immediate gain. Although its raw search speed is far lower (thousands of nodes per second), each node evaluation is richer than Stockfish's. This would potentially allow it to excel in planning long-term by excelling at strategically complex positions.
 
 In this paper, it is anticipated that the primary outcome will be the draw with LeelaChessZero winning the majority of the rest, primarily through superior handling of positional and imbalanced positions, while Stockfish will dominate in direct tactical encounters.
 ## Methodology
@@ -78,13 +74,13 @@ Recent versions of Stockfish incorporate Efficiency Updatable Neural Network (NN
 
 Due to the proprietary nature of AlphaZero, which makes it unavailable outside DeepMind, LeelaChessZero was selected as an open-source alternative based on the same architecture. It is based on reinforcement learning with self-play, is actively maintained, offers performance optimisations, and has won the TCEC that put it above other AlphaZero-inspired engines.
 
-Hardware used to run this match is a single ARM-based system with 10 CPU, 32 GPU, and 16 NPU cores supported by 32 GB of RAM and 1 TB SSD. This ensures no computational bottlenecks for either engine, providing enough resources for Stockfish's search and sufficient GPU and NPU for LeelaChessZero's neural network evaluations. The limiting factor for both chess engines was chosen to be time: specifically chosen to be 2.5 seconds per move after which, the engine played the best move it found in this time limit.
+Hardware used to run this match is a single ARM-based system with 10 CPU cores, 32 GPU cores, and 16 NPU cores supported by 32 GB of RAM and 1 TB SSD. This ensures no computational bottlenecks for either engine, providing enough resources for Stockfish's search and sufficient GPU and NPU for LeelaChessZero's neural network evaluations. The limiting factor for both chess engines was chosen to be time: specifically chosen to be 2.5 seconds per move after which, the engine played the best move it found in this time limit.
 
 Lastly, in contrast to certain engine competitions, where engines begin from predetermined opening positions played by humans, *books*, all games here start from the standard chess starting positions. (27) This is done to avoid bias that could arise from giving one chess engine better position over the other.
 ## Match Results
 ## Analysis
 1. Results
-PGN notation for the first five games is available in the Appendix (3). In the 100 game match, LeelaChessZero demonstrated superior performance over Stockfish with 49 wins, 37 ties and 14 losses, averaging 70 moves per game. This contrasts from the original DeepMind match, where AlphaZero remained undefeated with 28 wins and 72 draws. (28)
+PGN notation for the first five games is available in the Appendix (3). In the 100 game match, LeelaChessZero demonstrated superior performance over Stockfish with 49 wins, 37 ties and 14 losses, averaging 70 moves per game. This contrasts from the original DeepMind match, where AlphaZero remained undefeated with 28 wins and 72 draws. (28) This shows that evaluating quality nodes performs better than brute-force search focusing on the quantity, answering the dilemma encountered in hypothesis.
 
 The smaller proportion of draws in this experiment could be due to difference in hardware, engine versions, and training data, rather than fundamental algorithmic changes. One highly theoretical explanation for the high number of draws in both cases is the notion that "perfect" chess play would result in a tie: a hypothesis that remains unconfirmed until chess will be fully solved. If both engines approached optimal play, wins/losses would only occur when one side deviates from perfection. The higher loss rate for LeelaChessZero compared to AlphaZero in our match suggests that such deviations were more frequent.
 
@@ -110,4 +106,27 @@ They seem to occur most commonly during the openings such as in Move X Game Y or
 Possible explanation for such moves could be that Leela differs from Stockfish and Humans in a way that she sees the game. While Stockfish tries to search into the future by trying out as many moves as possible and finding one which seems most efficient, LeelaChessZero checks the possible legal moves and predicts the possibility of it leading to the victory. You could imagine it as Stockfish looking into short term benefits with near future positions while LeelaChessZero seeing the whole game as one as the probability of winning and loosing.
 
 ## Limitations
+Possible limitations of this study with improvements will be included in this section.
+1. Engine Versions
+	Stockfish 11 was used in order to avoid NNUE integration, however, LeelaChessZero was run using a recent build. This choice of engine versions may not represent the absolute peak performance of each engine's architecture as one had half a decade of improvements.
+	Some other alternative for Stockfish could have been used given that it would be up to date, have a clear heuristic search based architecture, and be optimised on competitive level. 
+2. Hardware Differences
+	While both engines were provided excess computational resources, the match was conducted on a single ARM based system rather than custom TPU clusters used in DeepMind's AlphaZero matches. differences in hardware architectures and available compute may have influenced the performance of both models.
+	This could be resolved by either obtaining powerful hardware or giving more time to calculate according amount of nodes.
+3. Architectural Differences
+	Both LeelaChessZero and Stockfish differ from the idealised engines described in the background section. Except the core algorithms, are many more additional systems added to both engines in order to boost their performance, which may add uncertainty to the research's findings.
+	In an ideal scenario, obtaining engines that purely implement the described architectures and use them for this research would strip modifications, most directly comparing the two approaches.
+4. Subjectivity of Qualitative Analysis
+	The analysis of the games played during the match were analysed by humans. The interpretations of terms such as "random" and "careless" moves was based on human evaluation of modern Stockfish's assessments. Such interpretations can be biased by human conceptions of optimal play, differing from optimal play derived by self-play agents.
+5. Observing Smarter Creation
+	Both chess engines perform on superhuman level and their play is often beyond understandable. However, author has spend efforts to comprehend them up to an extent, where educated guessed on the reasoning behind such play could be done.
+6. Match Duration
+	Match of 100 games was chosen in order to replicate the original match between AlphaZero and Stockfish; however, larger number of games would yield more robust statistics and reduce the influence of outlier games.
+	Extended the length of the match to a thousand or more would greatly improve the accuracy of the results, reducing the error. However, such scarce dataset would take longer to analyse. 
+7. Opening Position Choices
+	All games began from standard chess starting position. While this removed unintentional bias of one side having advantage over another at the beginning, it has resulted in less diverse openings.
+	Fair openings from human grandmasters could be picked for both engines to play as both white and black to avoid unfairness. However, this wouldn't fix the possibility of unknowingly giving a position that one engine recognises and plays better in over another.
 ## Conclusion
+This investigation compared the performances of deep reinforcement learning chess engine trained purely through self-play, LeelaChessZero, with traditional heuristic-based engine, Stockfish 11, in a 100 game match. 
+
+The results showed that LeelaChessZero achieved higher win rate with 49 wins, 37 draws, and 14 losses, outperforming Stockfish. 
